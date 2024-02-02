@@ -1,0 +1,258 @@
+.App {
+  text-align: center;
+  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  min-height: 100vh;
+  padding-bottom: 50px;
+  color: #402060;
+  h1 {
+    font-size: var(--title-font-size);
+    text-align: left;
+  }
+  h2 {
+    font-size: var(--subtitle-font-size);
+    text-align: left;
+    color: var(--primary-color-text);
+    font-weight: 300;
+  }
+
+  .header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 2vh 2vw;
+    button {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background-color: #f7edfe;
+      padding: 10px 20px;
+      font-weight: 500;
+      color: var(--primary-color-text);
+      box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+      &:hover {
+        box-shadow: none;
+        cursor: pointer;
+        background-color: #8e4ec6;
+        color: var(--secondary-color-text);
+      }
+    }
+  }
+
+  .login {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5vh;
+    .invite {
+      height: 10vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      img {
+        width: 50px;
+      }
+    }
+    form {
+      width: 20vw;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      input[type="text"],
+      input[type="password"] {
+        padding: 5px;
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        &:hover {
+          border: 2px solid #402060;
+        }
+      }
+      button {
+        background-color: #8347b9;
+        padding: 10px 0;
+        color: var(--secondary-color-text);
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 0 15px 4px rgba(0, 0, 0, 0.06);
+        &:hover {
+          box-shadow: none;
+          cursor: pointer;
+          background-color: #8e4ec6;
+        }
+      }
+    }
+  }
+  .allButHeader {
+    background-color: var(--background-color);
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+
+    .leftApp {
+      display: flex;
+      flex-direction: column;
+      background-color: var(--background-sec-color);
+      padding: 25px;
+      width: 20vw;
+      height: fit-content;
+      margin: 30px 0;
+      gap: 25px;
+      .title {
+        display: flex;
+        align-items: left;
+      }
+
+      .formDiv {
+        form {
+          display: flex;
+          flex-direction: column;
+          gap: 20px;
+          div {
+            display: flex;
+            .checkbox input {
+              width: 15px;
+            }
+            input {
+              width: 10vw;
+              margin-left: 15px;
+            }
+          }
+          input[type="submit"] {
+            background-color: var(--secondary-color);
+            border: none;
+            color: white;
+            padding: 8px 32px;
+            text-decoration: none;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+            &:hover {
+              background-color: #f2e2fc;
+              color: var(--secondary-color);
+            }
+          }
+        }
+      }
+      .filterButtons {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+
+        button {
+          background-color: #ffffff;
+          border: none;
+          color: var(--primary-color-text);
+          padding: 5px 32px;
+          text-decoration: none;
+          border: 1px solid #cbcdff;
+          cursor: pointer;
+          border-radius: 25px;
+
+          &:hover {
+            background-color: #cbcdff;
+          }
+          &.active {
+            background-color: #5151cd;
+            color: var(--secondary-color-text);
+            &:hover {
+              background-color: #272962;
+            }
+          }
+        }
+      }
+    }
+
+    .rightApp {
+      .title {
+        margin: 30px 0;
+        display: flex;
+        align-items: left;
+        flex-direction: column;
+        width: 60vw;
+      }
+
+      .list {
+        width: 60vw;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .item {
+          padding: 0 20px;
+          height: 60px;
+          background-color: var(--background-sec-color);
+          border-radius: 15px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          .left {
+            width: 20vw;
+            text-align: left;
+          }
+          .right {
+            display: flex;
+            gap: 20px;
+            .important {
+              display: flex;
+              align-items: center;
+              font-size: 16px;
+              font-weight: 400;
+              background-color: var(--important-color);
+              color: var(--secondary-color-text);
+              padding: 0px 16px;
+              border-radius: 15px;
+            }
+            .urgent {
+              display: flex;
+              align-items: center;
+              font-size: 16px;
+              font-weight: 400;
+              background-color: var(--urgent-color);
+              color: var(--secondary-color-text);
+              padding: 0px 16px;
+              border-radius: 15px;
+            }
+            .category {
+              display: flex;
+              align-items: center;
+              font-size: 16px;
+              font-weight: 400;
+              padding: 0px 16px;
+              border-radius: 5px;
+              border: 1px solid grey;
+            }
+            .date {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              background-color: var(--background-color);
+              padding: 0px 16px;
+              border-radius: 5px;
+            }
+            button {
+              background-color: var(--secondary-color);
+              border: none;
+              color: white;
+              padding: 5px 32px;
+              text-decoration: none;
+              cursor: pointer;
+              border-radius: 5px;
+              &:hover {
+                background-color: #f2e2fc;
+                color: var(--secondary-color);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
