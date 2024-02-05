@@ -1,58 +1,27 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import Moment from "moment";
-import { IoTime } from "react-icons/io5";
-import { IoIosListBox } from "react-icons/io";
 import { RiLogoutBoxLine } from "react-icons/ri";
-import { FaCheck } from "react-icons/fa";
-
-import "react-datepicker/dist/react-datepicker.css";
+import Connexion from "./components/Connexion";
+import TaskList from "./components/TaskList";
 
 function App() {
-  const [taskList, setTaskList] = useState([]);
   const [newTask, setNewTask] = useState("");
   const [important, setImportant] = useState(false);
   const [category, setCategory] = useState("");
   const [urgent, setUrgent] = useState(false);
   const [checkedUrgent, setCheckedUrgent] = useState(false);
   const [checkedImportant, setCheckedImportant] = useState(false);
-  const [inputPassword, setInputPassword] = useState("");
-  const [inputEmail, setInputEmail] = useState("");
   const [user, setUser] = useState({});
   const [filterImportant, setFilterImportant] = useState(false);
   const [filterUrgent, setFilterUrgent] = useState(false);
+  const [tasks, setTasks] = useState([]);
 
   /* dates */
   const currentDate = new Date();
   const soon = new Date();
   soon.setDate(soon.getDate() + 3);
   /* END */
-
-  const fetchTasks = async () => {
-    axios.get(`http://localhost:3310/api/tasks/user/${user.id}`).then((res) => {
-      setTaskList(res.data);
-    });
-  };
-
-  useEffect(() => {
-    fetchTasks();
-  }, [user]);
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:3310/api/login", {
-        inputEmail,
-        inputPassword,
-      });
-      setUser(res.data.user);
-      setInputEmail("");
-      setInputPassword("");
-      localStorage.setItem("token", res.data.token);
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const token = localStorage.getItem("token");
   const config = {
@@ -61,10 +30,18 @@ function App() {
 
   const logout = () => {
     setUser({});
-    setInputEmail("");
-    setInputPassword("");
     localStorage.clear();
   };
+
+  const fetchTasks = async () => {
+    axios.get(`http://localhost:3310/api/tasks/user/${user.id}`).then((res) => {
+      setTasks(res.data);
+    });
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [user]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -103,15 +80,6 @@ function App() {
     setCheckedUrgent(!checkedUrgent);
   };
 
-  const deleteTask = async (taskId) => {
-    try {
-      await axios.delete(`http://localhost:3310/api/tasks/${taskId}`);
-    } catch (err) {
-      console.error(err);
-    }
-    fetchTasks();
-  };
-
   return (
     <div className="App">
       {user.pseudo && (
@@ -122,31 +90,7 @@ function App() {
           </button>
         </div>
       )}
-      {!user.pseudo && (
-        <div className="login">
-          <div className="invite">
-            <IoIosListBox size="50px" />{" "}
-            <p>Please login to access your todolist</p>
-          </div>
-          <form onSubmit={handleLogin}>
-            <input
-              type="text"
-              value={inputEmail}
-              placeholder="Email"
-              onChange={(e) => setInputEmail(e.target.value)}
-            />
-            <input
-              type="password"
-              value={inputPassword}
-              placeholder="Password"
-              onChange={(e) => setInputPassword(e.target.value)}
-            />
-            <button className="button" type="submit">
-              Login{" "}
-            </button>
-          </form>
-        </div>
-      )}
+      {!user.pseudo && <Connexion setUser={setUser} />}
       {user.pseudo && (
         <div className="allButHeader">
           <div className="leftApp">
@@ -224,35 +168,12 @@ function App() {
               <h1>Good morning {user.pseudo}!</h1>
               <h2>Today, {Moment(currentDate).format("LL")}</h2>
             </div>
-            <div className="list">
-              {taskList
-                .filter((item) => (filterImportant ? item.important : true))
-                .filter((item2) => (filterUrgent ? item2.urgent : true))
-                .map((task) => (
-                  <div className="item" key={task.id}>
-                    <div className="left">{task.description}</div>
-                    <div className="right">
-                      {task.urgent === 1 && (
-                        <div className="urgent">Urgent</div>
-                      )}
-                      {task.important === 1 && (
-                        <div className="important">Important</div>
-                      )}
-                      <div className="date">
-                        <IoTime size="20px" />
-                        {Moment(task.deadline).format("MMM Do")}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => deleteTask(task.id)}
-                        aria-label="Done"
-                      >
-                        <FaCheck />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-            </div>
+            <TaskList
+              fetchTasks={fetchTasks}
+              filterImportant={filterImportant}
+              filterUrgent={filterUrgent}
+              tasks={tasks}
+            />
           </div>
         </div>
       )}

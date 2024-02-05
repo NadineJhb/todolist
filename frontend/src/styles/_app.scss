@@ -237,7 +237,7 @@
               padding: 0px 16px;
               border-radius: 5px;
             }
-            button {
+            button.deleteButton {
               background-color: var(--secondary-color);
               border: none;
               color: white;
@@ -247,6 +247,16 @@
               border-radius: 5px;
               &:hover {
                 background-color: #f2e2fc;
+                color: var(--secondary-color);
+              }
+            }
+            button.editButton {
+              background-color: white;
+              border: none;
+              text-decoration: none;
+              cursor: pointer;
+              border-radius: 5px;
+              &:hover {
                 color: var(--secondary-color);
               }
             }
