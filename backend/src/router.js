@@ -9,6 +9,7 @@ const router = express.Router();
 // Import itemControllers module for handling item-related operations
 const taskControllers = require("./controllers/taskControllers");
 const authControllers = require("./controllers/authControllers");
+
 const { verifyToken } = require("./services/auth");
 
 // Route to get a list of items
@@ -26,5 +27,6 @@ router.delete("/tasks/:id", taskControllers.destroy);
 router.use(verifyToken);
 
 router.post("/tasks", taskControllers.add);
+router.put("/tasks/:id", taskControllers.update);
 
 module.exports = router;

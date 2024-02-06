@@ -173,6 +173,7 @@ function App() {
               filterImportant={filterImportant}
               filterUrgent={filterUrgent}
               tasks={tasks}
+              config={config}
             />
           </div>
         </div>

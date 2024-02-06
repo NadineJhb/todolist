@@ -1,11 +1,19 @@
-function editModal() {
+function editModal({ handleSubmit, currentTask }) {
   return (
     <>
-      <p>coucou</p>
-      {/* <form onSubmit={editTask}>
-        <input type="text"></input>
-        
-        </form>; */}
+      <form
+        onSubmit={() => {
+          handleSubmit();
+        }}
+      >
+        <input
+          type="text"
+          name="description"
+          defaultValue={currentTask.description}
+        />
+        <button type="submit">Valider</button>
+      </form>
+      <p>{currentTask.description}</p>
     </>
   );
 }

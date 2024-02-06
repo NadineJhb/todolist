@@ -1,17 +1,51 @@
 import axios from "axios";
 import { IoTime } from "react-icons/io5";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FaCheck, FaRegEdit } from "react-icons/fa";
 import Moment from "moment";
 import PropTypes from "prop-types";
-import EditModal from "./EditModal";
+// import EditModal from "./EditModal";
 
-function TaskList({ fetchTasks, filterImportant, filterUrgent, tasks }) {
+function TaskList({
+  fetchTasks,
+  filterImportant,
+  filterUrgent,
+  tasks,
+  config,
+}) {
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState({});
 
-  const deleteTask = async (taskId) => {
+  const ref = useRef(null);
+
+  const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:3310/api/tasks/${taskId}`);
+      await axios.delete(`http://localhost:3310/api/tasks/${id}`);
+    } catch (err) {
+      console.error(err);
+    }
+    fetchTasks();
+  };
+
+  useEffect(() => {
+    if (ref.current) {
+      ref.current.value = selectedTask.description;
+    }
+  }, [ref, selectedTask]);
+
+  const handleEdit = async (e) => {
+    e.preventDefault();
+    const newDescription = e.target.description.value;
+
+    try {
+      await axios.put(
+        `http://localhost:3310/api/tasks/${selectedTask.id}`,
+        {
+          ...selectedTask,
+          description: newDescription,
+        },
+        config
+      );
     } catch (err) {
       console.error(err);
     }
@@ -46,15 +80,27 @@ function TaskList({ fetchTasks, filterImportant, filterUrgent, tasks }) {
               <button
                 type="button"
                 className="editButton"
-                onClick={() => setOpenEditModal(!openEditModal)}
                 aria-label="Done"
+                onClick={() => {
+                  setSelectedTask(task);
+                  setOpenEditModal(true);
+                }}
               >
                 <FaRegEdit size="20px" />
               </button>
             </div>
           </div>
         ))}
-      {openEditModal && <EditModal />}
+      {openEditModal && (
+        <form
+          onSubmit={(e) => {
+            handleEdit(e);
+          }}
+        >
+          <input type="text" name="description" ref={ref} />
+          <button type="submit">Valider</button>
+        </form>
+      )}
     </div>
   );
 }
@@ -63,14 +109,19 @@ TaskList.propTypes = {
   fetchTasks: PropTypes.func.isRequired,
   filterImportant: PropTypes.bool.isRequired,
   filterUrgent: PropTypes.bool.isRequired,
+  config: PropTypes.shape({
+    headers: PropTypes.shape({
+      Authorization: PropTypes.string,
+    }),
+  }).isRequired,
   tasks: PropTypes.arrayOf(
     PropTypes.shape({
       id: PropTypes.number,
       user_id: PropTypes.number,
       description: PropTypes.string,
       category: PropTypes.string,
-      urgent: PropTypes.bool,
-      important: PropTypes.bool,
+      urgent: PropTypes.number,
+      important: PropTypes.number,
     })
   ).isRequired,
 };

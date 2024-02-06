@@ -26,6 +26,22 @@ class TaskManager extends AbstractManager {
     return result.insertId;
   }
 
+  async edit(updatedTask, id) {
+    const [result] = await this.database.query(
+      `update ${this.table} set user_id = ?, description = ?, deadline = ?, category = ?, urgent = ?, important = ? where id = ?`,
+      [
+        updatedTask.user_id,
+        updatedTask.description,
+        new Date(updatedTask.deadline),
+        updatedTask.category,
+        updatedTask.urgent,
+        updatedTask.important,
+        id,
+      ]
+    );
+    return result;
+  }
+
   // The Rs of CRUD - Read operations
 
   async read(id) {

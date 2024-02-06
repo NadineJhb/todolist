@@ -52,10 +52,6 @@ const getByUser = async (req, res, next) => {
   }
 };
 
-// The E of BREAD - Edit (Update) operation
-// This operation is not yet implemented
-
-// The A of BREAD - Add (Create) operation
 const add = async (req, res, next) => {
   // Extract the item data from the request body
   const newTask = req.body;
@@ -71,6 +67,25 @@ const add = async (req, res, next) => {
   }
 };
 
+const update = async (req, res, next) => {
+  const { id } = req.params;
+  const updatedTask = req.body;
+  console.warn(id);
+  console.warn(updatedTask);
+
+  try {
+    const result = await tables.tasks.edit(updatedTask, id);
+    console.warn(result);
+    if (result.affectedRows === 0) {
+      res.sendStatus(404);
+    } else {
+      res.sendStatus(204);
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 const destroy = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -79,21 +94,16 @@ const destroy = async (req, res, next) => {
       res.status(200).json(result);
     }
   } catch (err) {
-    // Pass any errors to the error-handling middleware
     next(err);
   }
   return null;
 };
 
-// The D of BREAD - Destroy (Delete) operation
-// This operation is not yet implemented
-
-// Ready to export the controller functions
 module.exports = {
   browse,
   read,
   getByUser,
-  // edit,
+  update,
   add,
   destroy,
 };
